@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Campaign extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'campaign_type',
+        'campaign_name',
+        'offer_type',
+        'brand_id',
+        'tag_id',
+        'brand_payout_option',
+        'brand_payout_value',
+        'brand_commission_per_transaction',
+        'influencer_payout_option',
+        'influencer_payout_value',
+        'influencer_commission_per_transaction',
+        'end_date',
+        'enable_asci',
+        'channels',
+        'category',
+        'brand_tags',
+        'hash_tags',
+        'brand_campaign_brief',
+        'brand_campaign_kpi',
+        'brand_campaign_tc',
+        'influencer_campaign_brief',
+        'influencer_campaign_kpi',
+        'influencer_campaign_tc',
+        'landing_page_url',
+        'utm',
+        'utm_tag',
+        'utm_id',
+        'utm_source',
+        'utm_content',
+        'utm_campaign',
+        'utm_term',
+        'utm_medium',
+        'campaign_visibility',
+        'status',
+        'commission_type_on_first_transaction',
+        'commission_type_on_other_transaction',
+        'commission_on_first_transaction_company',
+        'commission_on_first_transaction_influencer',
+        'commission_on_other_transaction_company',
+        'commission_on_other_transaction_influencer',
+        'lead_commission_value_influencer',
+        'lead_commission_value_brand',
+        'lead_acquisition_value_brand',
+        'lead_acquisition_value_influencer',
+        'effective_from',
+        'note',
+        'kpichangenotification',
+        'platform_mandatory',
+        'media_approval',
+        'deliverable_notification',
+        'send_notification_on',
+        'brand_maximum_payout',
+        'influencer_maximum_payout',
+        'brand_product_cost',
+        'brand_commission_per_sale',
+        'brand_campaign_payout',
+        'influencer_product_cost',
+        'influencer_commission_per_sale',
+        'influencer_campaign_payout',
+        'govt_regulatory_body',
+        'registration_number',
+        'certificate',
+        'updated_by',
+    ];
+}

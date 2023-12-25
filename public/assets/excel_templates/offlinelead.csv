@@ -1,0 +1,4 @@
+Lead Identifier,Timestamp,Lead Name,Mobile Number,Email,City,Lead Status,Customer Code,Acquisition Status,Acquisition Timestamp,First Transaction Status,First Transaction Date,First Transaction Value,Transaction Counts Minus First,Transaction Dates Minus First,Transaction Values Minus First,Smarkerz id,Campaign Name,Company Name,UTM Source,UTM,UTM ID,UTM Medium,UTM Campaign,UTM Term,UTM Content
+AB44550673,11/27/2021 4:17,Anu Bala,,,Bangalore,New,,1,11/27/2021 14:45,1,11/27/2021 14:45,500,2,"2021-11-28,2021-11-30","1,000,400",q6aospjm,Test Camp 23Dec,mzkk,,,,,,,
+AB71677563,11/27/2021 4:18,Sudha Kushwaha,,,Mumbai,New,,1,11/27/2021 16:15,1,11/28/2021 16:15,600,3,"2021-12-01,2021-12-04,2021-12-10","5,001,000,400",q6aospjm,Test Camp 23Dec,mzkk,,,,,,,
+AB60433706,11/27/2021 4:19,Tarun Kachhi,,,Delhi,New,,1,11/27/2021 11:30,1,11/30/2021 11:30,1000,4,"2021-12-01,2021-12-14,2021-12-20,2021-12-20","8,004,001,000,500",q6aospjm,Test Camp 23Dec,mzkk,,,,,,,
