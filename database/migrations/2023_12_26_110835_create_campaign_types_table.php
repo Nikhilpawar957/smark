@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('role_permissions', function (Blueprint $table) {
+        Schema::create('campaign_types', function (Blueprint $table) {
             $table->id();
-            $table->integer('role_id')->nullable();
-            $table->string('route')->nullable();
+            $table->string('name')->nullable();
+            $table->integer('updated_by')->comment('foreign key for admins')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_permissions');
+        Schema::dropIfExists('campaign_types');
     }
 };

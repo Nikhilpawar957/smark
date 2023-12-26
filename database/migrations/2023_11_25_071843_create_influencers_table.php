@@ -25,8 +25,8 @@ return new class extends Migration
             $table->integer('city')->nullable();
             $table->integer('state')->nullable();
             $table->integer('country')->nullable();
-            $table->integer('influencer_type')->default(0)->comment('1-Performance, 2-Commercials, 3-Barter');
-            $table->integer('influencer_tier')->nullable()->comment('1-Nano (1k-10k), 2-Micro (10k-50k), 3- Mid Tier (50k-500k), 4-Macro(500k-1M), 5-Mega(1M+)');
+            $table->integer('influencer_type')->default(0)->comment('foreign key for campaign_types');
+            $table->integer('influencer_tier')->nullable()->comment('foreign key for tiers');
             $table->string('instagram_url')->nullable();
             $table->string('instagram_count')->nullable();
             $table->string('youtube_url')->nullable();
@@ -43,9 +43,9 @@ return new class extends Migration
             $table->string('other_count')->nullable();
             $table->string('gender')->nullable();
             $table->date('dob')->nullable();
-            $table->integer('category')->nullable();
+            $table->integer('tag')->comment('foreign key for tags')->nullable();
             $table->text('profile_image')->nullable();
-            $table->integer('status')->nullable()->comment('1 - Profile Pending, 2 - Pending, 3 - Approved,4 - Declined');
+            $table->integer('status')->nullable()->comment('1 - Profile Pending, 2 - Pending, 3 - Approved, 4 - Declined');
             $table->string('referral_code')->default('E-1')->comment('referral_code from admins table');
             $table->integer('updated_by')->nullable()->comment('foreign key for admins table');
             $table->timestamps();

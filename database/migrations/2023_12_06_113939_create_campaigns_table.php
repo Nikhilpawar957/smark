@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
             $table->string('campaign_name')->nullable();
-            $table->integer('campaign_type')->comment('1 - Performance, 2 - Barter, 3 - Branding')->nullable();
+            $table->integer('campaign_type')->comment('foreign key for campaign_types')->nullable();
             $table->integer('offer_type')->comment('0 - General, 1 - Special')->nullable();
             $table->integer('brand_id')->comment('foreign key for brands')->nullable();
             $table->integer('tag_id')->comment('foreign key for tags')->nullable();
@@ -59,7 +59,7 @@ return new class extends Migration
             $table->string('utm_medium')->nullable();
 
             // step 4
-            $table->integer('campaign_visibility')->default(0)->nullable()->comment('0-default visible to all,1-visible to selected,2-hidden to selected');
+            $table->integer('campaign_visibility')->default(0)->nullable()->comment('0-default visible to all, 1-visible to selected, 2-hidden to selected');
             $table->integer('status')->default('2')->comment('1-approved,2-pending,3-stopped,4-declined');
 
             //step 5
