@@ -3,7 +3,7 @@
         <div class="menu-icon bi bi-list"></div>
     </div>
     <div class="header-right">
-        <div class="user-notification">
+        {{-- <div class="user-notification">
             <div class="dropdown">
                 <a class="dropdown-toggle no-arrow" href="javascript:void(0);" role="button" data-toggle="dropdown">
                     <i class="icon-copy dw dw-notification"></i>
@@ -76,14 +76,14 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="user-info-dropdown">
             <div class="dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);" role="button" data-toggle="dropdown">
                     <span class="user-icon">
                         <img src="{{ asset('assets/src/img/user.png') }}" alt="" />
                     </span>
-                    <span class="user-name">Ross C. Lopez</span>
+                    <span class="user-name">{{ Auth::guard('admin')->user()->first_name." ".Auth::guard('admin')->user()->last_name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="dw dw-logout"></i> Log Out</a>
@@ -260,7 +260,7 @@
                         </li>
                         <li>
                             <a class="{{ request()->is('admin/role-management') ? 'active' : '' }}"
-                                href="role-management.php">Role Management</a>
+                                href="{{ route('admin.role-management') }}">Role Management</a>
                         </li>
                         <li>
                             <a class="{{ request()->is('admin/employee-performance') ? 'active' : '' }}"
@@ -275,16 +275,11 @@
                 </li>
                 <hr class="dashed">
                 <li>
-                    <a href="javascript:void(0);" class="dropdown-toggle no-arrow">
-                        <span class="micon flaticon-381-user-7"></span><span class="mtext">Profile</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="reset-passowrd.php" class="dropdown-toggle no-arrow">
+                    <a href="{{ route('admin.reset-password') }}" class="dropdown-toggle no-arrow {{ request()->is('admin/reset-password') ? 'active' : '' }}">
                         <img class="micon"
                             src="{{ asset('assets/src/img/sidebar-icons/hover/ic_outline-lock-reset1.svg') }}"
                             alt="">
-                        <span class="mtext">Reset Passowrd</span>
+                        <span class="mtext">Reset Password</span>
                     </a>
                 </li>
                 <li>

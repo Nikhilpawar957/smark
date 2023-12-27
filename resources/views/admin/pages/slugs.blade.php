@@ -26,6 +26,11 @@
                                     placeholder="Select Date Range" type="text" />
                             </div>
                         </div>
+                        <div class="col-xl-3 col-lg-3 col-md-6">
+                            <div class="form-group mb-0">
+                                <button class="btn btn-secondary mr-3" onclick="return resetFilter();">Clear</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <table id="slugs_table" class="table hover nowrap w-100">
@@ -93,13 +98,6 @@
             //     [10, 15, 25, 50, 100, -1],
             //     [10, 15, 25, 50, 100, "All"]
             // ],
-            "language": {
-                "info": "_START_-_END_ of _TOTAL_ entries",
-                paginate: {
-                    next: '<i class="ion-chevron-right"></i>',
-                    previous: '<i class="ion-chevron-left"></i>'
-                }
-            },
             dom: 'Bfrtp',
             buttons: [
                 'csv', 'pdf'
@@ -165,5 +163,12 @@
 
             ]
         });
+
+        function resetFilter(){
+            $("input").val('');
+            $("select").val('').change();
+            $("textarea").val('').change();
+            table.ajax.reload(null, false);
+        }
     </script>
 @endpush

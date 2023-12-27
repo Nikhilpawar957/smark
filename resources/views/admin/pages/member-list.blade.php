@@ -24,7 +24,8 @@
                                 <select id="created_by" name="created_by" class="custom-select solid-input">
                                     <option value="">Added By</option>
                                     @foreach (\App\Models\Admin::where('role', '=', 0)->get() as $admin)
-                                        <option value="{{ $admin->id }}">{{ $admin->first_name . ' ' . $admin->last_name }}
+                                        <option value="{{ $admin->id }}">
+                                            {{ $admin->first_name . ' ' . $admin->last_name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -77,11 +78,11 @@
             }
         });
 
-        $("[name='created_by']").on("change", function(){
+        $("[name='created_by']").on("change", function() {
             table.draw();
         });
 
-        $("[name='status']").on("change", function(){
+        $("[name='status']").on("change", function() {
             table.draw();
         });
 
@@ -93,13 +94,6 @@
                 [10, 15, 25, 50, 100, -1],
                 [10, 15, 25, 50, 100, "All"]
             ],
-            "language": {
-                "info": "_START_-_END_ of _TOTAL_ entries",
-                paginate: {
-                    next: '<i class="ion-chevron-right"></i>',
-                    previous: '<i class="ion-chevron-left"></i>'
-                }
-            },
             ajax: {
                 url: "{{ route('admin.get-member-list') }}",
                 data: function(data) {
@@ -121,8 +115,8 @@
                     searchable: true
                 },
                 {
-                    data: 'admin_name',
-                    name: 'admin_name',
+                    data: 'username',
+                    name: 'username',
                     orderable: true,
                     searchable: true
                 },
@@ -135,12 +129,6 @@
                 {
                     data: 'mobile_no',
                     name: 'mobile_no',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'role_name',
-                    name: 'role_name',
                     orderable: true,
                     searchable: true
                 },
@@ -160,6 +148,16 @@
                     searchable: true
                 },
                 {
+                    data: 'role_name',
+                    name: 'role_name',
+                    render: function (data, type, full, meta) {
+                        return '<strong class="text-uppercase">' + data + '</strong>';
+                    },
+                    orderable: true,
+                    searchable: true
+                },
+
+                {
                     data: 'action',
                     name: 'action',
                     orderable: true,
@@ -170,11 +168,11 @@
 
         function changeStatus(id, status) {
             var formdata = new FormData();
-            formdata.append('bank_id', id);
+            formdata.append('admin_id', id);
             formdata.append('status', status);
             formdata.append('action', 'change_status');
             $.ajax({
-                url: "{{ url('api/brands') }}",
+                url: "{{ url('api/member') }}",
                 method: "POST",
                 data: formdata,
                 processData: false,
@@ -185,7 +183,7 @@
                     //console.log(response);
                     if (response.status) {
                         toastr.success(response.message);
-                        $('#brands_table').DataTable().ajax.reload(null, false);
+                        table.ajax.reload(null, false);
                     } else {
                         toastr.error(response.message);
                     }
@@ -197,6 +195,13 @@
                     });
                 }
             });
+        }
+
+        function resetFilter() {
+            $("input").val('');
+            $("select").val('').change();
+            $("textarea").val('').change();
+            table.ajax.reload(null, false);
         }
     </script>
 @endpush

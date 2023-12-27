@@ -39,6 +39,7 @@ class Admin extends Authenticatable
         'gender',
         'relation_status',
         'dob',
+        'doj',
         'referral_code',
         'created_by',
         'updated_by'

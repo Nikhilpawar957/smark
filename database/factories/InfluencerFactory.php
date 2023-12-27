@@ -41,7 +41,7 @@ class InfluencerFactory extends Factory
             'last_name' => $this->faker->lastName,
             'gender' => $this->genders[$inf],
             'dob' => $this->faker->date,
-            'category' => Tag::all()->random()->id,
+            'tag' => Tag::all()->random()->id,
             'profile_image' => $this->faker->imageUrl,
             'status' => rand(1,4),
             'updated_by' => 1,

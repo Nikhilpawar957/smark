@@ -24,20 +24,20 @@
                         <input type="hidden" name="tag_id" value="">
                         <div class="row">
                             <div class="col-lg-2">
-                                <h6 class="fw-regular">Category Name<span style="color:red">*</span></h6>
+                                <h6 class="fw-regular">Name<span style="color:red">*</span></h6>
                             </div>
                             <div class="col-lg-4">
                                 <div class="">
                                     <input type="text" class="form-control solid-input" name="name"
-                                        placeholder="Enter Category">
+                                        placeholder="Enter Name">
                                 </div>
+                                <span class="small error-text name_error"></span>
                             </div>
-                            <span class="small error-text name_error"></span>
                         </div>
                         <br />
                         <div class="row">
                             <div class="col-lg-2">
-                                <h6 class="fw-regular">Category Image<span style="color:red">*</span></h6>
+                                <h6 class="fw-regular">Image<span style="color:red">*</span></h6>
                             </div>
                             <div class="col-lg-10">
                                 <div class="upload__box">
@@ -71,7 +71,7 @@
                                 <tr>
                                     <th>Sr No</th>
                                     <th>Image</th>
-                                    <th>Category</th>
+                                    <th>Name</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -111,13 +111,6 @@
                 [10, 15, 25, 50, 100, -1],
                 [10, 15, 25, 50, 100, "All"]
             ],
-            "language": {
-                "info": "_START_-_END_ of _TOTAL_ entries",
-                paginate: {
-                    next: '<i class="ion-chevron-right"></i>',
-                    previous: '<i class="ion-chevron-left"></i>'
-                }
-            },
             ajax: "{{ route('admin.get-tag-list') }}",
             columns: [{
                     data: 'DT_RowIndex',

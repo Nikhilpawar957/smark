@@ -56,7 +56,7 @@
         var table = $('#brands_table').DataTable({
             processing: true,
             serverSide: true,
-            responsive: true,
+            responsive: false,
             aLengthMenu: [
                 [10, 15, 25, 50, 100, -1],
                 [10, 15, 25, 50, 100, "All"]

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Brand;
 use App\Models\Tag;
 use Carbon\Carbon;
@@ -326,186 +327,7 @@ class MasterController extends Controller
         return response()->json($response);
     }
 
-    /*
-    *
-    * Brands API Methods
-    * get, store, change_status, delete
-    *
-    */
-    public function brands(Request $request)
-    {
-        $response = array();
 
-        if ($request->action) {
-            switch ($request->action) {
-                case 'get':
-                    if ($request->brand_id) {
-                        $request->validate([
-                            'brand_id' => 'required|exists:brands,id',
-                        ]);
-
-                        $brand = Brand::find($request->brand_id);
-
-                        if ($brand->isNotEmpty()) {
-                            $response = [
-                                'status' => true,
-                                'message' => 'Brand Found',
-                                'data' => $brand->toArray(),
-                            ];
-                        } else {
-                            $response = [
-                                'status' => false,
-                                'message' => 'Brand Not Found',
-                                'data' => [],
-                            ];
-                        }
-                    } else {
-                        $brands = Brand::all();
-
-                        if ($brands->isNotEmpty()) {
-                            $response = [
-                                'status' => true,
-                                'message' => 'Brands Found',
-                                'data' => $brands->toArray(),
-                            ];
-                        } else {
-                            $response = [
-                                'status' => false,
-                                'message' => 'Brands Not Found',
-                                'data' => [],
-                            ];
-                        }
-                    }
-                    break;
-                case 'store':
-                    if ($request->brand_id) {
-                        $request->validate([
-                            'brand_id' => 'required|exists:brands,id',
-                            'company_name' => 'required|max:255',
-                            'email' => 'required|email',
-                            'mobile_no' => 'required|numeric',
-                        ]);
-
-                        $update_data = [
-                            'company_name' => $request->company_name,
-                            'email' => $request->email,
-                            'mobile_no' => $request->mobile_no,
-                            'director_name' => $request->director_name,
-                            'password' => Hash::make($request->password),
-                            'address' => $request->address,
-                            'pincode' => $request->pincode,
-                            'city' => $request->city,
-                            'state' => $request->state,
-                            'country' => $request->country,
-                        ];
-
-                        $save_data = Brand::where('id', '=', $request->brand_id)->update($update_data);
-
-                        if ($save_data) {
-                            $response = [
-                                'status' => true,
-                                'message' => 'Brand Updated',
-                            ];
-                        } else {
-                            $response = [
-                                'status' => false,
-                                'message' => 'Brand Not Updated',
-                            ];
-                        }
-                    } else {
-                        $request->validate([
-                            'company_name' => 'required|max:255',
-                            'email' => 'required|email',
-                            'mobile_no' => 'required|numeric',
-                        ]);
-
-                        $insert_data = [
-                            'company_name' => $request->company_name,
-                            'email' => $request->email,
-                            'mobile_no' => $request->mobile_no
-                        ];
-
-                        $save_data = Brand::insert($insert_data);
-
-                        if ($save_data) {
-                            $response = [
-                                'status' => true,
-                                'message' => 'Brand Added',
-                            ];
-                        } else {
-                            $response = [
-                                'status' => false,
-                                'message' => 'Brand Not Added',
-                            ];
-                        }
-                    }
-
-                    break;
-                case 'change_status':
-                    $request->validate([
-                        'brand_id' => 'required|exists:brands,id',
-                        'status' => 'required',
-                    ]);
-
-                    $update_data = [
-                        'status' => $request->status,
-                        'updated_by' => Auth::guard('admin')->user()->id,
-                    ];
-
-                    $change_status = DB::table('brands')->where('id', '=', $request->brand_id)->update($update_data);
-
-                    if ($change_status) {
-                        $response = [
-                            'status' => true,
-                            'message' => 'Status Updated',
-                        ];
-                    } else {
-                        $response = [
-                            'status' => false,
-                            'message' => 'Status Not Updated',
-                        ];
-                    }
-
-                    break;
-                case 'delete':
-                    $request->validate([
-                        'brand_id' => 'required|exists:brands,id',
-                    ]);
-
-                    $brand = Brand::find($request->brand_id);
-
-                    $delete_brand = $brand->delete();
-
-                    if ($delete_brand) {
-                        $response = [
-                            'status' => true,
-                            'message' => 'Brand Deleted',
-                        ];
-                    } else {
-                        $response = [
-                            'status' => false,
-                            'message' => 'Brand Not Deleted',
-                        ];
-                    }
-
-                    break;
-
-                default:
-                    $response = [
-                        'status' => false,
-                        'message' => 'Invalid Action',
-                    ];
-                    break;
-            }
-        } else {
-            $response = [
-                'status' => false,
-                'message' => 'Please Specify Action to Perform',
-            ];
-        }
-
-        return response()->json($response);
-    }
 
     /*
     *
@@ -658,6 +480,7 @@ class MasterController extends Controller
                     $update_data = [
                         'status' => $request->status,
                         'updated_by' => Auth::guard('admin')->user()->id,
+                        'updated_at' => Carbon::now(),
                     ];
 
                     $change_status = DB::table('bank_details')->where('id', '=', $request->bank_id)->update($update_data);
@@ -733,22 +556,173 @@ class MasterController extends Controller
 
                     break;
                 case 'store':
-                    $request->validate([
-                        'username' => 'required|unique:admins,username',
-                        'email' => 'required|email|unique:admins.email',
-                        'password' => 'required|min:5|max:16',
-                        'first_name' => 'required|string',
-                        'last_name' => 'required|string',
-                        'mobile_no' => 'required|numeric', 
-                        'role' => 'required|exists:roles,id',
-                        ''                       
-                    ]);
+                    if ($request->admin_id) {
+                        $request->validate([
+                            'admin_id' => 'required|exists:admins,id',
+                            'username' => 'required|unique:admins,username,' . $request->admin_id,
+                            'email' => 'required|email|unique:admins.email,' . $request->admin_id,
+                            'password' => 'required|min:5|max:16',
+                            'first_name' => 'required|string|min:3',
+                            'last_name' => 'required|string|min:3',
+                            'mobile_no' => 'required|numeric|unique:admins,mobile_no,' . $request->admin_id,
+                            'role' => 'required|exists:roles,id',
+                        ]);
+
+                        $update_data = [
+                            'username' => $request->username,
+                            'email' => $request->email,
+                            'password' => $request->password,
+                            'first_name' => $request->first_name,
+                            'last_name' => $request->last_name,
+                            'mobile_no' => $request->mobile_no,
+                            'role' => $request->role,
+                            'country' => @$request->country,
+                            'state' => @$request->state,
+                            'city' => @$request->city,
+                            'updated_by' => Auth::guard('admin')->user()->id,
+                            'updated_at' => Carbon::now(),
+                        ];
+
+                        $save_data = Admin::where('id', '=', $request->admin_id)->update($update_data);
+
+                        if ($save_data) {
+                            $response = [
+                                'status' => true,
+                                'message' => 'Member Added',
+                            ];
+                        } else {
+                            $response = [
+                                'status' => false,
+                                'message' => 'Member Not Added',
+                            ];
+                        }
+                    } else {
+                        $request->validate([
+                            'username' => 'required|unique:admins,username',
+                            'email' => 'required|email|unique:admins,email',
+                            'password' => 'required|min:5|max:16',
+                            'first_name' => 'required|string|min:3',
+                            'last_name' => 'required|string|min:3',
+                            'mobile_no' => 'required|numeric|unique:admins,mobile_no',
+                            'role' => 'required|exists:roles,id',
+                            'reporting_to' => 'required|exists:admins,id',
+                            'country' => 'required'
+                        ]);
+
+                        $admin = new Admin();
+
+                        $admin->email = $request->email;
+                        $admin->username = $request->username;
+                        $admin->password = Hash::make($request->password);
+                        $admin->first_name = $request->first_name;
+                        $admin->last_name = $request->last_name;
+                        $admin->mobile_no = $request->mobile_no;
+                        $admin->address = @$request->address;
+                        $admin->pincode = @$request->pincode;
+                        $admin->city = @$request->city;
+                        $admin->state = @$request->state;
+                        $admin->country = $request->country;
+                        $admin->role = $request->role;
+                        $admin->designation = @$request->designation;
+                        $admin->status = 1;
+                        $admin->reporting_to = $request->reporting_to;
+                        $admin->gender = @$request->gender;
+                        $admin->relation_status = @$request->relation_status;
+                        $admin->dob = @$request->dob;
+                        $admin->doj = @$request->doj;
+                        $admin->referral_code = @$request->referral_code;
+
+                        $save_data = $admin->save();
+
+                        if ($save_data) {
+                            $response = [
+                                'status' => true,
+                                'message' => 'Member Added',
+                            ];
+                        } else {
+                            $response = [
+                                'status' => false,
+                                'message' => 'Member Not Added',
+                            ];
+                        }
+                    }
                     break;
                 case 'delete':
-                    # code...
+                    $request->validate([
+                        'admin_id' => 'required|exists:admins,id',
+                    ]);
+
+                    $delete_data = DB::table('admins')->delete($request->admin_id);
+
+                    if ($delete_data) {
+                        $response = [
+                            'status' => true,
+                            'message' => 'Member Deleted',
+                        ];
+                    } else {
+                        $response = [
+                            'status' => false,
+                            'message' => 'Member Not Deleted',
+                        ];
+                    }
                     break;
                 case 'change_status':
-                    # code...
+                    $request->validate([
+                        'admin_id' => 'required|exists:admins,id',
+                        'status' => 'required',
+                    ]);
+
+                    $update_data = [
+                        'status' => $request->status,
+                        'updated_by' => Auth::guard('admin')->user()->id,
+                        'updated_at' => Carbon::now(),
+                    ];
+
+                    $change_status = DB::table('admins')->where('id', '=', $request->admin_id)->update($update_data);
+
+                    if ($change_status) {
+                        $response = [
+                            'status' => true,
+                            'message' => 'Status Updated',
+                        ];
+                    } else {
+                        $response = [
+                            'status' => false,
+                            'message' => 'Status Not Updated',
+                        ];
+                    }
+                    break;
+                case 'change-password':
+                    $request->validate([
+                        'admin_id' => 'required|exists:admins,id',
+                        'old_password' => [
+                            'required', function ($attribute, $value, $fail) {
+                                if (!Hash::check($value, Admin::find(Auth::guard('admin')->user()->id)->password)) {
+                                    return $fail(__('The old password is incorrect'));
+                                }
+                            }
+                        ],
+                        'new_password' => 'required|min:5|max:16',
+                        'confirm_password' => 'required|same:new_password',
+                    ]);
+
+                    $admin = Admin::find($request->admin_id);
+                    $admin->password = Hash::make($request->new_password);
+
+                    $change_password = $admin->save();
+
+                    if ($change_password) {
+                        $response = [
+                            'status' => true,
+                            'message' => 'Password Updated',
+                        ];
+                    } else {
+                        $response = [
+                            'status' => false,
+                            'message' => 'Password Not Updated',
+                        ];
+                    }
+
                     break;
                 default:
                     $response = [
@@ -767,11 +741,12 @@ class MasterController extends Controller
         return response()->json($response);
     }
 
-    /*  
+    /*
     *
     * Country Data
     */
-    public function get_countries(Request $request) {
+    public function get_countries(Request $request)
+    {
         $response = array();
 
         $countries = DB::table('country')->select('id', 'name')->orderBy('name')->get()->toArray();
@@ -825,7 +800,7 @@ class MasterController extends Controller
         return response()->json($response);
     }
 
-    /*  
+    /*
     *
     * City Data
     */

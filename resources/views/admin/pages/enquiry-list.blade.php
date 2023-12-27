@@ -74,13 +74,13 @@
                     previous: '<i class="ion-chevron-left"></i>'
                 }
             },
-            dom: 'Blfrtp',
+            dom: 'Blftip',
             buttons: [
-                'copy', 'csv', 'pdf', 'print'
+                'copy', 'csv', 'pdf', 'print',
             ],
-            aLengthMenu: [
-                [10, 15, 25, 50, 100, -1],
-                [10, 15, 25, 50, 100, "All"]
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 rows', '25 rows', '50 rows', 'Show all']
             ],
             ajax: "{{ route('admin.get-enquiry-list') }}",
             columns: [{

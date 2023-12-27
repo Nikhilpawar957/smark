@@ -74,4 +74,47 @@ class InfluencerController extends Controller
             }
         }
     }
+
+    /*
+    *
+    * Influencers API Methods
+    * get, store, change_status, delete
+    *
+    */
+    public function influencers(Request $request)
+    {
+        $response = array();
+
+        if ($request->action) {
+            switch ($request->action) {
+                case 'get':
+
+                    break;
+                case 'store':
+                    # code...
+                    break;
+                case 'change_status':
+                    # code...
+                    break;
+                case 'delete':
+                    # code...
+                    break;
+
+                default:
+                    $response = [
+                        'status' => false,
+                        'message' => 'Invalid Action',
+                    ];
+                    break;
+            }
+        } else {
+            $response = [
+                'status' => false,
+                'message' => 'Please Specify Action to Perform',
+            ];
+        }
+
+
+        return response()->json($response);
+    }
 }

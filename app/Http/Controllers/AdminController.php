@@ -366,10 +366,11 @@ class AdminController extends Controller
     {
         if ($request->ajax()) {
             $data = DB::table('admins')
-                ->selectRaw("admins.id,admins.first_name || ' ' || admins.last_name AS admin_name,status,email,mobile_no,roles.name AS role_name")
+                ->selectRaw("admins.id,admins.first_name || ' ' || admins.last_name AS admin_name,username,status,email,mobile_no,roles.name AS role_name")
                 ->leftJoin('roles', 'admins.role', '=', 'roles.id')
                 ->where('role', '!=', 0)
-                ->orderByDesc('id');
+                ->whereNull('deleted_at');
+
 
             if ($request->filled('created_by')) {
                 $data = $data->where('created_by', '=', $request->created_by);

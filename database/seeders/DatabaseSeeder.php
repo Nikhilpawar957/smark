@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\Tag::factory(10)->create();
         // \App\Models\Admin::factory(10)->create();
         // \App\Models\Brand::factory(10)->create();
-        // \App\Models\Influencer::factory(10)->create();
+        \App\Models\Influencer::factory(200)->create();
         // \App\Models\Campaign::factory(100)->create();
         // \App\Models\Slugs::factory(100)->create();
 

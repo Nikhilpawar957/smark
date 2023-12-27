@@ -96,7 +96,8 @@
                                         <select class="custom-select form-control">
                                             <option value="" selected>All</option>
                                             @foreach (DB::table('channels')->get() as $channel)
-                                                <option value="{{ $channel->id }}">{{ ucwords($channel->channel_name) }}</option>
+                                                <option value="{{ $channel->id }}">{{ ucwords($channel->channel_name) }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -188,14 +189,20 @@
                 }
             },
             ajax: "{{ route('admin.get-influencer-list') }}",
+            order: [
+                [1, 'asc']
+            ],
             columns: [{
                     data: 'id',
                     name: 'id',
+                    className: 'dt-body-center',
                     render: function(data, type, full, meta) {
-                        return '<input type="checkbox" name="id[]" value="' + data + '">';
+                        return '<div class="dt-checkbox"><input type="checkbox" name="id[]" value="' + $(
+                                '<div/>').text(data).html() +
+                            '"><span class="dt-checkbox-label"></span></div>';
                     },
-                    orderable: true,
-                    searchable: true
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'DT_RowIndex',
@@ -277,7 +284,7 @@
 
         function changeStatus(id, status) {
             var formdata = new FormData();
-            formdata.append('bank_id', id);
+            formdata.append('influencer_id', id);
             formdata.append('status', status);
             formdata.append('action', 'change_status');
             $.ajax({
@@ -292,7 +299,7 @@
                     //console.log(response);
                     if (response.status) {
                         toastr.success(response.message);
-                        $('#influencers_table').DataTable().ajax.reload(null, false);
+                        table.ajax.reload(null, false);
                     } else {
                         toastr.error(response.message);
                     }
@@ -305,5 +312,12 @@
                 }
             });
         }
+
+        $('#example-select-all').on('click', function() {
+            var rows = table.rows({
+                'search': 'applied'
+            }).nodes();
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
     </script>
 @endpush

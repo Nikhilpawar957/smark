@@ -28,16 +28,17 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/styles/icon-font.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/src/plugins/sweetalert2/sweetalert2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/src/fonts/flaticon/flaticon.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendors/styles/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendors/styles/custom.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    @stack('styles')    <link rel="stylesheet" href="{{ asset('assets/vendors/styles/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/styles/custom.css') }}" />
+
     <style>
         .error-text {
             color: red !important;
         }
     </style>
 
-    @stack('styles')
+
 </head>
 
 <body>
