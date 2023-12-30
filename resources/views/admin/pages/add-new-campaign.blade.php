@@ -22,7 +22,7 @@
                                 <div class="h2 mt-1 mb-0">Performance Campaign</div>
                                 <img class="info-badge campaign-type" src="{{ asset('assets/src/img/info.svg') }}" data-toggle="tooltip"
                                     data-placement="top"
-                                    title="Performance campaigns are the campaign for which you pay only when their is measurable result. Select this option to create performance based campaign."></img>
+                                    title="Performance campaigns are the campaign for which you pay only when their is measurable result. Select this option to create performance based campaign.">
                             </div>
                         </a>
                     </div>
@@ -34,7 +34,7 @@
                                 <div class="h2 mt-1 mb-0">Branding Campaign</div>
                                 <img class="info-badge campaign-type" src="{{ asset('assets/src/img/info.svg') }}" data-toggle="tooltip"
                                     data-placement="top"
-                                    title="Branding campaign goal is to increasing brand awareness and improving brand equity in the mind of the consumer"></img>
+                                    title="Branding campaign goal is to increasing brand awareness and improving brand equity in the mind of the consumer">
                             </div>
                         </a>
                     </div>
@@ -46,7 +46,7 @@
                                 <div class="h2 mt-1 mb-0 pt-10">Barter Campaign</div>
                                 <img class="info-badge campaign-type" src="{{ asset('assets/src/img/info.svg') }}" data-toggle="tooltip"
                                     data-placement="top"
-                                    title="Barter collaboration can be described as a situation whereby a company brand reaches out to an influencer to help promote its product in exchange for free product samples for the influencer to use"></img>
+                                    title="Barter collaboration can be described as a situation whereby a company brand reaches out to an influencer to help promote its product in exchange for free product samples for the influencer to use">
                             </div>
                         </a>
                     </div>

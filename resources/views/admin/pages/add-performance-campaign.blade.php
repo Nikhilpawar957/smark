@@ -11,7 +11,6 @@
     </style>
 @endpush
 @section('content')
-
     <div class="main-container">
         <div class="p-3">
             <div class="min-height-200px">
@@ -25,271 +24,284 @@
                 <div class="card-box mb-30 p-1">
                     <div class="">
                         <div class="wizard-content">
-                            <form id="performanceCampaignForm" method="POST" class="tab-wizard wizard-circle wizard"
-                                enctype="multipart/form-data">
-                                @csrf
+                            <div id="performanceCampaignForm" class="tab-wizard wizard-circle wizard">
                                 <input type="hidden" id="campaign_id" name="campaign_id"
                                     value="@if (isset($data)) {{ $data->id }} @else {{ '' }} @endif">
-                                <input type="hidden" id="campaign_type" name="campaign_type"
-                                    value="1">
+                                <input type="hidden" id="campaign_type" name="campaign_type" value="1">
                                 <!-- Step 1 -->
                                 <h5>Campaign Brief</h5>
                                 <section class="pb-2">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Campaign Name*</label>
-                                                <input type="text" class="form-control" name="campaign_name"
-                                                    placeholder="Enter Campaign Name" value="" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Company* :</label>
-                                                <select class="custom-select form-control">
-                                                    <option value="" selected>Select Company</option>
-                                                    @foreach (\App\Models\Brand::whereNull('deleted_at')->get() as $brand)
-                                                        <option value="{{ $brand->id }}">{{ $brand->company_name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="row">
-                                                <div class="col-md-9 pr-0">
-                                                    <div class="form-group">
-                                                        <label>Campaign Payout <img class="info-badge"
-                                                                src="{{ asset('assets/src/img/info.svg') }}"
-                                                                data-toggle="tooltip" data-placement="top"
-                                                                title="Select your preferred Campaign Payout Option: CPA (Cost Per Acquisition), CPL (Cost Per Lead), or CPT (Cost Per Transaction)."></label>
-                                                        <input type="text" class="form-control br-r0"
-                                                            name="influencer_payout_value" placeholder="Enter Amount" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3 pl-0">
-                                                    <div class="form-group">
-                                                        <label>&nbsp;</label>
-                                                        <select class="custom-select form-control br-l0"
-                                                            name="influencer_payout_option">
-                                                            <option value="cpa" selected>CPA</option>
-                                                            <option value="cpl">CPL</option>
-                                                            <option value="cpt">CPT</option>
-                                                        </select>
-                                                    </div>
+                                    <form id="campaignStepOne" action="{{ url('api/campaigns') }}" method="post"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Campaign Name*</label>
+                                                    <input type="text" class="form-control" name="campaign_name"
+                                                        placeholder="Enter Campaign Name" />
+                                                    <span class="error-text small campaign_name_error"></span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Commission per Transaction %</label>
-                                                <input type="text" class="form-control"
-                                                    name="influencer_commission_per_transaction" value="" />
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Company* :</label>
+                                                    <select class="custom-select form-control">
+                                                        <option value="" selected>Select Company</option>
+                                                        @foreach (\App\Models\Brand::where('status', '=', 1)->whereNull('deleted_at')->get() as $brand)
+                                                            <option value="{{ $brand->id }}">{{ $brand->company_name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Campaign Channel</label>
-                                                <select class="custom-select form-select" name="channels">
-                                                    <option value="">Select Channels</option>
-                                                    @foreach (DB::table('channels')->select('*')->get() as $channel)
-                                                        <option value="{{ $channel->id }}">
-                                                            {{ ucwords($channel->channel_name) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Campaign Category</label>
-                                                <select class="custom-select form-control" name="category">
-                                                    <option value="" selected>Select Category</option>
-                                                    @foreach (\App\Models\Tag::where('status','=',1)->get() as $tag)
-                                                        <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Type</label>
-                                                <select class="custom-select form-control" id="offer_type" name="offer_type">
-                                                    <option value="0" selected>General</option>
-                                                    <option value="1">Special</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Enable ASCI Mandatory? <img class="info-badge"
-                                                        src="{{ asset('assets/src/img/info.svg') }}" data-toggle="tooltip"
-                                                        data-placement="top"
-                                                        title="When enabled, Influencers must provide Government Regulatory Body Name, Registration Code, and Upload the Certificate."></label>
-                                                <div class="d-flex mt-2">
-                                                    <div class="custom-control custom-radio mr-3">
-                                                        <input type="radio" id="customRadio1" name="enable_asci"
-                                                            value="1" class="custom-control-input" selected />
-                                                        <label class="custom-control-label" for="customRadio1">Yes</label>
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    <div class="col-md-9 pr-0">
+                                                        <div class="form-group">
+                                                            <label>Campaign Payout <img class="info-badge"
+                                                                    src="{{ asset('assets/src/img/info.svg') }}"
+                                                                    data-toggle="tooltip" data-placement="top"
+                                                                    title="Select your preferred Campaign Payout Option: CPA (Cost Per Acquisition), CPL (Cost Per Lead), or CPT (Cost Per Transaction)."></label>
+                                                            <input type="text" class="form-control br-r0"
+                                                                name="influencer_payout_value" placeholder="Enter Amount" />
+                                                        </div>
                                                     </div>
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" id="customRadio2" name="enable_asci"
-                                                            value="0" class="custom-control-input" />
-                                                        <label class="custom-control-label" for="customRadio2">No</label>
+                                                    <div class="col-md-3 pl-0">
+                                                        <div class="form-group">
+                                                            <label>&nbsp;</label>
+                                                            <select class="custom-select form-control br-l0"
+                                                                name="influencer_payout_option">
+                                                                <option value="cpa" selected>CPA</option>
+                                                                <option value="cpl">CPL</option>
+                                                                <option value="cpt">CPT</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>End Date</label>
-                                                <input class="form-control date-picker" name="end_date"
-                                                    placeholder="Select Date" type="text" />
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Commission per Transaction %</label>
+                                                    <input type="text" class="form-control"
+                                                        name="influencer_commission_per_transaction" value="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Campaign Channel</label>
+                                                    <select class="custom-select form-select" name="channels">
+                                                        <option value="">Select Channels</option>
+                                                        @foreach (DB::table('channels')->select('*')->get() as $channel)
+                                                            <option value="{{ $channel->id }}">
+                                                                {{ ucwords($channel->channel_name) }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Campaign Category</label>
+                                                    <select class="custom-select form-control" name="category">
+                                                        <option value="" selected>Select Category</option>
+                                                        @foreach (\App\Models\Tag::where('status', '=', 1)->get() as $tag)
+                                                            <option value="{{ $tag->id }}">{{ $tag->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="mb-2">Campaign brand tags to be entered in caption</label>
-                                                <h6 class="sub-heading">Enter Brand Tags</h6>
-                                                <input type="text" class="form-control" name="brand_tags"
-                                                    placeholder="@instagram_handle @youtube_channel @facebook_page" />
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Type</label>
+                                                    <select class="custom-select form-control" id="offer_type"
+                                                        name="offer_type">
+                                                        <option value="0" selected>General</option>
+                                                        <option value="1">Special</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="mb-2">Campaign hashtags to be entered in caption</label>
-                                                <h6 class="sub-heading">Enter Hashtags</h6>
-                                                <input type="text" class="form-control" name="hash_tags"
-                                                    placeholder="#hashtag1, #hashtag2, #hashtag3" />
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Enable ASCI Mandatory? <img class="info-badge"
+                                                            src="{{ asset('assets/src/img/info.svg') }}"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="When enabled, Influencers must provide Government Regulatory Body Name, Registration Code, and Upload the Certificate."></label>
+                                                    <div class="d-flex mt-2">
+                                                        <div class="custom-control custom-radio mr-3">
+                                                            <input type="radio" id="customRadio1" name="enable_asci"
+                                                                value="1" class="custom-control-input" selected />
+                                                            <label class="custom-control-label"
+                                                                for="customRadio1">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio2" name="enable_asci"
+                                                                value="0" class="custom-control-input" />
+                                                            <label class="custom-control-label"
+                                                                for="customRadio2">No</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>End Date</label>
+                                                    <input class="form-control date-picker" name="end_date"
+                                                        placeholder="Select Date" type="text" />
+                                                </div>
+                                            </div>
+
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="mb-2">Campaign brand tags to be entered in
+                                                        caption</label>
+                                                    <h6 class="sub-heading">Enter Brand Tags</h6>
+                                                    <input type="text" class="form-control" name="brand_tags"
+                                                        placeholder="@instagram_handle @youtube_channel @facebook_page" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="mb-2">Campaign hashtags to be entered in
+                                                        caption</label>
+                                                    <h6 class="sub-heading">Enter Hashtags</h6>
+                                                    <input type="text" class="form-control" name="hash_tags"
+                                                        placeholder="#hashtag1, #hashtag2, #hashtag3" />
+                                                </div>
+                                            </div>
 
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="tab campaign-brief">
-                                                <ul class="nav nav-pills" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active text-blue" data-toggle="tab"
-                                                            href="#brief" role="tab" aria-selected="true">Campaign
-                                                            Brief</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-blue" data-toggle="tab" href="#kpi"
-                                                            role="tab" aria-selected="false">Campaign KPI</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-blue" data-toggle="tab" href="#tnc"
-                                                            role="tab" aria-selected="false">Campaign T&C</a>
-                                                    </li>
-                                                </ul>
-                                                <div class="tab-content">
-                                                    <div class="tab-pane fade mt-1 show active" id="brief"
-                                                        role="tabpanel">
-                                                        <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_brief">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="tab campaign-brief">
+                                                    <ul class="nav nav-pills" role="tablist">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link active text-blue" data-toggle="tab"
+                                                                href="#brief" role="tab"
+                                                                aria-selected="true">Campaign
+                                                                Brief</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-blue" data-toggle="tab"
+                                                                href="#kpi" role="tab"
+                                                                aria-selected="false">Campaign KPI</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-blue" data-toggle="tab"
+                                                                href="#tnc" role="tab"
+                                                                aria-selected="false">Campaign T&C</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane fade mt-1 show active" id="brief"
+                                                            role="tabpanel">
+                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_brief">
 
                                                         </textarea>
-                                                    </div>
-                                                    <div class="tab-pane fade mt-1" id="kpi" role="tabpanel">
-                                                        <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_kpi">
+                                                        </div>
+                                                        <div class="tab-pane fade mt-1" id="kpi" role="tabpanel">
+                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_kpi">
 
                                                         </textarea>
-                                                    </div>
-                                                    <div class="tab-pane fade mt-1" id="tnc" role="tabpanel">
-                                                        <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_tc">
+                                                        </div>
+                                                        <div class="tab-pane fade mt-1" id="tnc" role="tabpanel">
+                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_tc">
 
                                                         </textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <hr class="dashed my-3">
-                                    <h5 class="fw-regular mb-2">Campaign Details for Company (For Admin Only)</h5>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-9 pr-0">
-                                                    <div class="form-group">
-                                                        <label>Campaign Payout <img class="info-badge"
-                                                                src="{{ asset('assets/src/img/info.svg') }}"></label>
-                                                        <input type="text" class="form-control"
-                                                            name="brand_payout_value" placeholder="Enter Amount" />
+                                        <hr class="dashed my-3">
+                                        <h5 class="fw-regular mb-2">Campaign Details for Company (For Admin Only)</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-9 pr-0">
+                                                        <div class="form-group">
+                                                            <label>Campaign Payout <img class="info-badge"
+                                                                    src="{{ asset('assets/src/img/info.svg') }}"></label>
+                                                            <input type="text" class="form-control"
+                                                                name="brand_payout_value" placeholder="Enter Amount" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 pl-0">
+                                                        <div class="form-group">
+                                                            <label>&nbsp;</label>
+                                                            <select class="custom-select form-control"
+                                                                name="brand_payout_option">
+                                                                <option value="cpa" selected>CPA</option>
+                                                                <option value="cpt">CPT</option>
+                                                                <option value="cpl">CPL</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3 pl-0">
-                                                    <div class="form-group">
-                                                        <label>&nbsp;</label>
-                                                        <select class="custom-select form-control"
-                                                            name="brand_payout_option">
-                                                            <option value="cpa" selected>CPA</option>
-                                                            <option value="cpt">CPT</option>
-                                                            <option value="cpl">CPL</option>
-                                                        </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Commission per Transaction %</label>
+                                                    <input type="text" class="form-control"
+                                                        name="brand_commission_per_transaction" value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="tab campaign-brief">
+                                                    <ul class="nav nav-pills" role="tablist">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link active text-blue" data-toggle="tab"
+                                                                href="#brief1" role="tab"
+                                                                aria-selected="true">Campaign
+                                                                Brief</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-blue" data-toggle="tab"
+                                                                href="#kpi1" role="tab"
+                                                                aria-selected="false">Campaign KPI</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-blue" data-toggle="tab"
+                                                                href="#tnc1" role="tab"
+                                                                aria-selected="false">Campaign T&C</a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane fade mt-1 show active" id="brief1"
+                                                            role="tabpanel">
+                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_brief">
+
+                                                        </textarea>
+                                                        </div>
+                                                        <div class="tab-pane fade mt-1" id="kpi1" role="tabpanel">
+                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_kpi">
+
+                                                        </textarea>
+                                                        </div>
+                                                        <div class="tab-pane fade mt-1" id="tnc1" role="tabpanel">
+                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_tc">
+
+                                                        </textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Commission per Transaction %</label>
-                                                <input type="text" class="form-control"
-                                                    name="brand_commission_per_transaction" value="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="tab campaign-brief">
-                                                <ul class="nav nav-pills" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active text-blue" data-toggle="tab"
-                                                            href="#brief1" role="tab" aria-selected="true">Campaign
-                                                            Brief</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-blue" data-toggle="tab" href="#kpi1"
-                                                            role="tab" aria-selected="false">Campaign KPI</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-blue" data-toggle="tab" href="#tnc1"
-                                                            role="tab" aria-selected="false">Campaign T&C</a>
-                                                    </li>
-                                                </ul>
-                                                <div class="tab-content">
-                                                    <div class="tab-pane fade mt-1 show active" id="brief1"
-                                                        role="tabpanel">
-                                                        <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_brief">
-
-                                                        </textarea>
-                                                    </div>
-                                                    <div class="tab-pane fade mt-1" id="kpi1" role="tabpanel">
-                                                        <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_kpi">
-
-                                                        </textarea>
-                                                    </div>
-                                                    <div class="tab-pane fade mt-1" id="tnc1" role="tabpanel">
-                                                        <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_tc">
-
-                                                        </textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </section>
                                 <!-- Step 2 -->
                                 <h5>Campaign Assets</h5>
                                 <section class="pb-2">
-                                    <div class="container">
+                                    <form id="campaignStepTwo" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
                                         <div class="row">
                                             <div class="col-lg-2">
                                                 <h6 class="fw-regular">Campaign Logo</h6>
@@ -374,12 +386,12 @@
                                                     placeholder="Paste URLs"></textarea>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </section>
                                 <!-- Step 3 -->
                                 <h5>Campaign URL</h5>
                                 <section class="pb-2">
-                                    <div class="container">
+                                    <form id="campaignStepThree" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
 
                                         <div class="row">
                                             <div class="col-md-6">
@@ -446,12 +458,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </section>
                                 <!-- Step 4 -->
                                 <h5>Influencer List</h5>
                                 <section class="pb-2">
-                                    <div class="container">
+                                    <form id="campaignStepFour" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group d-flex align-items-center">
@@ -517,12 +529,12 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </section>
                                 <!-- Step 5 -->
                                 <h5>Payout Settings</h5>
                                 <section class="">
-                                    <div class="container">
+                                    <form id="campaignStepFive" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <h5 class="fw-regular mb-2">Campaign Payout Settings</h5>
@@ -728,9 +740,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </section>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -741,7 +753,6 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/src/plugins/jquery-steps/jquery.steps.js') }}"></script>
-    <script src="{{ asset('assets/vendors/scripts/steps-setting.js') }}"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/super-build/ckeditor.js"></script>
     <script>
         jQuery(document).ready(function() {
@@ -986,145 +997,94 @@
                     window.editors[index] = newEditor
                 });
         });
-    </script>
-    {{-- <script>
-        // This sample still does not showcase all CKEditor&nbsp;5 features (!)
-        // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
-        CKEDITOR.ClassicEditor.create(document.querySelectorAll(".ckeditor"), {
-            // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
-            toolbar: {
-                items: [
-                    'heading', '|',
-                    'bold', 'italic', 'strikethrough', 'underline', '|',
-                    'bulletedList', 'numberedList', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                    'alignment', '|',
-                    'link', 'insertImage', 'insertTable', 'mediaEmbed', '|',
-                    'sourceEditing'
-                ],
-                shouldNotGroupWhenFull: true
-            },
-            // Changing the language of the interface requires loading the language file using the <script> tag.
-            // language: 'es',
-            list: {
-                properties: {
-                    styles: true,
-                    startIndex: true,
-                    reversed: true
-                }
-            },
-            // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-            heading: {
-                options: [
-                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                    { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                    { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                    { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-                ]
-            },
-            // https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
-            placeholder: 'Welcome to CKEditor&nbsp;5!',
-            // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
-            fontFamily: {
-                options: [
-                    'default',
-                    'Arial, Helvetica, sans-serif',
-                    'Courier New, Courier, monospace',
-                    'Georgia, serif',
-                    'Lucida Sans Unicode, Lucida Grande, sans-serif',
-                    'Tahoma, Geneva, sans-serif',
-                    'Times New Roman, Times, serif',
-                    'Trebuchet MS, Helvetica, sans-serif',
-                    'Verdana, Geneva, sans-serif'
-                ],
-                supportAllValues: true
-            },
-            // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-size-feature
-            fontSize: {
-                options: [ 10, 12, 14, 'default', 18, 20, 22 ],
-                supportAllValues: true
-            },
-            // Be careful with the setting below. It instructs CKEditor to accept ALL HTML markup.
-            // https://ckeditor.com/docs/ckeditor5/latest/features/general-html-support.html#enabling-all-html-features
-            htmlSupport: {
-                allow: [
-                    {
-                        name: /.*/,
-                        attributes: true,
-                        classes: true,
-                        styles: true
-                    }
-                ]
-            },
-            // https://ckeditor.com/docs/ckeditor5/latest/features/link.html#custom-link-attributes-decorators
-            link: {
-                decorators: {
-                    addTargetToExternalLinks: true,
-                    defaultProtocol: 'https://',
-                    toggleDownloadable: {
-                        mode: 'manual',
-                        label: 'Downloadable',
-                        attributes: {
-                            download: 'file'
-                        }
-                    }
-                }
-            },
-            // https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#configuration
-            mention: {
-                feeds: [
-                    {
-                        marker: '@',
-                        feed: [
-                            '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
-                            '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
-                            '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
-                            '@sugar', '@sweet', '@topping', '@wafer'
-                        ],
-                        minimumCharacters: 1
-                    }
-                ]
-            },
-            // The "super-build" contains more premium features that require additional configuration, disable them below.
-            // Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
-            removePlugins: [
-                // These two are commercial, but you can try them out without registering to a trial.
-                // 'ExportPdf',
-                // 'ExportWord',
-                'AIAssistant',
-                'CKBox',
-                'CKFinder',
-                'EasyImage',
-                // This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
-                // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
-                // Storing images as Base64 is usually a very bad idea.
-                // Replace it on production website with other solutions:
-                // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
-                // 'Base64UploadAdapter',
-                'RealTimeCollaborativeComments',
-                'RealTimeCollaborativeTrackChanges',
-                'RealTimeCollaborativeRevisionHistory',
-                'PresenceList',
-                'Comments',
-                'TrackChanges',
-                'TrackChangesData',
-                'RevisionHistory',
-                'Pagination',
-                'WProofreader',
-                // Careful, with the Mathtype plugin CKEditor will not load when loading this sample
-                // from a local file system (file://) - load this site via HTTP server if you enable MathType.
-                'MathType',
-                // The following features are part of the Productivity Pack and require additional license.
-                'SlashCommand',
-                'Template',
-                'DocumentOutline',
-                'FormatPainter',
-                'TableOfContents',
-                'PasteFromOfficeEnhanced'
-            ]
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                "Authorization": "Bearer {{ session()->get('apitoken') }}"
+            }
         });
-    </script> --}}
+
+        $(".tab-wizard").steps({
+            headerTag: "h5",
+            bodyTag: "section",
+            transitionEffect: "fade",
+            titleTemplate: '<span class="step">#index#</span> #title#',
+            labels: {
+                finish: "Submit"
+            },
+            onStepChanging: function(event, currentIndex, newIndex) {
+                //console.log(event.currentTarget);
+                var section = $(this).find('section.current form');
+                //console.log(section[0].id);
+                var form_id = section[0].id;
+                var form = document.querySelector('#' + form_id);
+                var formdata = new FormData(form);
+
+                // If Campaign Id is not empty
+                if ($("[name='campaign_id']").val() != "") {
+                    formdata.append('campaign_id', $("[name='campaign_id']").val());
+                }
+
+                // If Current Index is 0 (First Step)
+                if (currentIndex == 0) {
+                    // CKEditor Data for Influencers
+                    var influencer_campaign_brief = CKEDITOR.instances.influencer_campaign_brief.getData();
+                    var influencer_campaign_kpi = CKEDITOR.instances.influencer_campaign_kpi.getData();
+                    var influencer_campaign_tc = CKEDITOR.instances.influencer_campaign_tc.getData();
+                    formdata.append('influencer_campaign_brief', influencer_campaign_brief);
+                    formdata.append('influencer_campaign_kpi', influencer_campaign_kpi);
+                    formdata.append('influencer_campaign_tc', influencer_campaign_tc);
+
+                    // CKEditor Data for Brands
+                    var brand_campaign_brief = CKEDITOR.instances.brand_campaign_brief.getData();
+                    var brand_campaign_kpi = CKEDITOR.instances.brand_campaign_kpi.getData();
+                    var brand_campaign_tc = CKEDITOR.instances.brand_campaign_tc.getData();
+                    formdata.append('brand_campaign_brief', brand_campaign_brief);
+                    formdata.append('brand_campaign_kpi', brand_campaign_kpi);
+                    formdata.append('brand_campaign_tc', brand_campaign_tc);
+                }
+                formdata.append('campaign_type', $("[name='campaign_type']").val());
+                formdata.append('action', 'store');
+                formdata.append('step', currentIndex);
+                $.ajax({
+                    url: $(form).attr('action'),
+                    method: $(form).attr('method'),
+                    data: formdata,
+                    processData: false,
+                    dataType: "json",
+                    contentType: false,
+                    beforeSend: function() {
+                        $(form).find('span.error-text').text('');
+                    },
+                    success: function(response) {
+                        //console.log(response);
+                        toastr.remove();
+                        if (response.status) {
+                            if (currentIndex == 0) {
+                                $("[name='campaign_id']").val(response.data);
+                            }
+                            return true;
+                        } else {
+                            toastr.error(response.message);
+                            return false;
+                        }
+                    },
+                    error: function(response) {
+                        toastr.remove();
+                        $.each(response.responseJSON.errors, function(prefix, val) {
+                            $(form).find('span.' + prefix + '_error').text(val[0]);
+                        });
+                        return false;
+                    }
+                });
+            },
+            onStepChanged: function(event, currentIndex, priorIndex) {
+                $('.steps .current').prevAll().addClass('disabled');
+            },
+            onFinished: function(event, currentIndex) {
+                //alert();
+            }
+        });
+    </script>
 @endpush

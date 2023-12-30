@@ -103,7 +103,7 @@
                                             <div class="form-group">
                                                 <label>Is Platform Mandatory ? <img class="info-badge"
                                                         src="{{ asset('assets/src/img/info.svg') }}" data-toggle="tooltip" data-placement="top"
-                                                        title="Select your preferred Campaign Payout Option: CPA (Cost Per Action), CPL (Cost Per Lead), or CPT (Cost Per Thousand Impressions)."></img></label>
+                                                        title="Select your preferred Campaign Payout Option: CPA (Cost Per Action), CPL (Cost Per Lead), or CPT (Cost Per Thousand Impressions)."></label>
                                                 <div class="d-flex mt-3">
                                                     <div class="custom-control custom-radio mr-3">
                                                         <input type="radio" id="customRadio1" name="customRadio"
@@ -124,7 +124,7 @@
                                             <div class="form-group">
                                                 <label>Media Approval <img class="info-badge" src="{{ asset('assets/src/img/info.svg') }}"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="When checked 'Yes', the company gains the authority to approve or decline media uploads by influencers. Admin has this privilege by default."></img></label>
+                                                        title="When checked 'Yes', the company gains the authority to approve or decline media uploads by influencers. Admin has this privilege by default."></label>
                                                 <div class="d-flex mt-3">
                                                     <div class="custom-control custom-radio mr-3">
                                                         <input type="radio" id="customRadio1" name="customRadio"
@@ -143,7 +143,7 @@
                                             <div class="form-group">
                                                 <label>Enable ASCI Mandatory? <img class="info-badge"
                                                         src="{{ asset('assets/src/img/info.svg') }}" data-toggle="tooltip" data-placement="top"
-                                                        title="ASCI Mandatory: When enabled, influencers must provide Government Regulatory body name, Registration code, and certificate upload."></img></label>
+                                                        title="ASCI Mandatory: When enabled, influencers must provide Government Regulatory body name, Registration code, and certificate upload."></label>
                                                 <div class="d-flex mt-3">
                                                     <div class="custom-control custom-radio mr-3">
                                                         <input type="radio" id="customRadio1" name="customRadio"

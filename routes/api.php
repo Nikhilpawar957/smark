@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CampaignController;
 use App\Http\Controllers\API\MasterController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\InfluencerController;
@@ -32,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/brands', [BrandController::class, 'brands'])->name('brands');
 
     // Influencers
-    Route::post('/influencers',[InfluencerController::class, 'influcers'])->name('influencers');
+    Route::post('/influencers', [InfluencerController::class, 'influencers'])->name('influencers');
 
     // Bank Details
     Route::post('/bank_details', [MasterController::class, 'bank_details'])->name('bank_details');
@@ -46,7 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Get Cities (State Id)
     Route::post('/get_cities', [MasterController::class, 'get_cities'])->name('get_cities');
 
-
+    // Campaign
+    Route::post('/campaigns', [CampaignController::class, 'campaigns'])->name('campaigns');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
