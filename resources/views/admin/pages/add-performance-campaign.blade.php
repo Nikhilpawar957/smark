@@ -46,13 +46,15 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Company* :</label>
-                                                    <select class="custom-select form-control">
+                                                    <select id="brand_id" name="brand_id"
+                                                        class="custom-select form-control">
                                                         <option value="" selected>Select Company</option>
                                                         @foreach (\App\Models\Brand::where('status', '=', 1)->whereNull('deleted_at')->get() as $brand)
                                                             <option value="{{ $brand->id }}">{{ $brand->company_name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span class="error-text small brand_id_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -65,6 +67,8 @@
                                                                     title="Select your preferred Campaign Payout Option: CPA (Cost Per Acquisition), CPL (Cost Per Lead), or CPT (Cost Per Transaction)."></label>
                                                             <input type="text" class="form-control br-r0"
                                                                 name="influencer_payout_value" placeholder="Enter Amount" />
+                                                            <span
+                                                                class="error-text small influencer_payout_value_error"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3 pl-0">
@@ -76,6 +80,8 @@
                                                                 <option value="cpl">CPL</option>
                                                                 <option value="cpt">CPT</option>
                                                             </select>
+                                                            <span
+                                                                class="error-text small influencer_payout_option_error"></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -87,6 +93,8 @@
                                                     <label>Commission per Transaction %</label>
                                                     <input type="text" class="form-control"
                                                         name="influencer_commission_per_transaction" value="" />
+                                                    <span
+                                                        class="error-text small influencer_commission_per_transaction_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -100,18 +108,21 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span class="error-text small channels_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Campaign Category</label>
-                                                    <select class="custom-select form-control" name="category">
+                                                    <select class="custom-select form-control" id="tag_id"
+                                                        name="tag_id">
                                                         <option value="" selected>Select Category</option>
                                                         @foreach (\App\Models\Tag::where('status', '=', 1)->get() as $tag)
                                                             <option value="{{ $tag->id }}">{{ $tag->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    <span class="error-text small tag_id_error"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,6 +135,7 @@
                                                         <option value="0" selected>General</option>
                                                         <option value="1">Special</option>
                                                     </select>
+                                                    <span class="error-text small offer_type_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -146,6 +158,7 @@
                                                                 for="customRadio2">No</label>
                                                         </div>
                                                     </div>
+                                                    <span class="error-text small enable_asci_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -153,6 +166,7 @@
                                                     <label>End Date</label>
                                                     <input class="form-control date-picker" name="end_date"
                                                         placeholder="Select Date" type="text" />
+                                                    <span class="error-text small end_date_error"></span>
                                                 </div>
                                             </div>
 
@@ -165,6 +179,7 @@
                                                     <h6 class="sub-heading">Enter Brand Tags</h6>
                                                     <input type="text" class="form-control" name="brand_tags"
                                                         placeholder="@instagram_handle @youtube_channel @facebook_page" />
+                                                    <span class="error-text small brand_tags_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -174,6 +189,7 @@
                                                     <h6 class="sub-heading">Enter Hashtags</h6>
                                                     <input type="text" class="form-control" name="hash_tags"
                                                         placeholder="#hashtag1, #hashtag2, #hashtag3" />
+                                                    <span class="error-text small hash_tags_error"></span>
                                                 </div>
                                             </div>
 
@@ -202,17 +218,17 @@
                                                     <div class="tab-content">
                                                         <div class="tab-pane fade mt-1 show active" id="brief"
                                                             role="tabpanel">
-                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_brief">
+                                                            <textarea id="influencer_campaign_brief" class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_brief">
 
                                                         </textarea>
                                                         </div>
                                                         <div class="tab-pane fade mt-1" id="kpi" role="tabpanel">
-                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_kpi">
+                                                            <textarea id="influencer_campaign_kpi" class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_kpi">
 
                                                         </textarea>
                                                         </div>
                                                         <div class="tab-pane fade mt-1" id="tnc" role="tabpanel">
-                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_tc">
+                                                            <textarea id="influencer_campaign_tc" class="ckeditor w-100 mt-1 form-control" name="influencer_campaign_tc">
 
                                                         </textarea>
                                                         </div>
@@ -231,6 +247,7 @@
                                                                     src="{{ asset('assets/src/img/info.svg') }}"></label>
                                                             <input type="text" class="form-control"
                                                                 name="brand_payout_value" placeholder="Enter Amount" />
+                                                            <span class="error-text small brand_payout_value_error"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3 pl-0">
@@ -242,6 +259,8 @@
                                                                 <option value="cpt">CPT</option>
                                                                 <option value="cpl">CPL</option>
                                                             </select>
+                                                            <span
+                                                                class="error-text small brand_payout_option_error"></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -251,6 +270,8 @@
                                                     <label>Commission per Transaction %</label>
                                                     <input type="text" class="form-control"
                                                         name="brand_commission_per_transaction" value="" />
+                                                    <span
+                                                        class="error-text small brand_commission_per_transaction_error"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -278,17 +299,17 @@
                                                     <div class="tab-content">
                                                         <div class="tab-pane fade mt-1 show active" id="brief1"
                                                             role="tabpanel">
-                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_brief">
+                                                            <textarea id="brand_campaign_brief" class="ckeditor w-100 mt-1 form-control" name="brand_campaign_brief">
 
                                                         </textarea>
                                                         </div>
                                                         <div class="tab-pane fade mt-1" id="kpi1" role="tabpanel">
-                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_kpi">
+                                                            <textarea id="brand_campaign_kpi" class="ckeditor w-100 mt-1 form-control" name="brand_campaign_kpi">
 
                                                         </textarea>
                                                         </div>
                                                         <div class="tab-pane fade mt-1" id="tnc1" role="tabpanel">
-                                                            <textarea class="ckeditor w-100 mt-1 form-control" name="brand_campaign_tc">
+                                                            <textarea id="brand_campaign_tc" class="ckeditor w-100 mt-1 form-control" name="brand_campaign_tc">
 
                                                         </textarea>
                                                         </div>
@@ -301,7 +322,8 @@
                                 <!-- Step 2 -->
                                 <h5>Campaign Assets</h5>
                                 <section class="pb-2">
-                                    <form id="campaignStepTwo" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
+                                    <form id="campaignStepTwo" action="{{ url('api/campaigns') }}" method="post"
+                                        enctype="multipart/form-data" class="container">
                                         <div class="row">
                                             <div class="col-lg-2">
                                                 <h6 class="fw-regular">Campaign Logo</h6>
@@ -391,7 +413,8 @@
                                 <!-- Step 3 -->
                                 <h5>Campaign URL</h5>
                                 <section class="pb-2">
-                                    <form id="campaignStepThree" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
+                                    <form id="campaignStepThree" action="{{ url('api/campaigns') }}" method="post"
+                                        enctype="multipart/form-data" class="container">
 
                                         <div class="row">
                                             <div class="col-md-6">
@@ -463,7 +486,8 @@
                                 <!-- Step 4 -->
                                 <h5>Influencer List</h5>
                                 <section class="pb-2">
-                                    <form id="campaignStepFour" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
+                                    <form id="campaignStepFour" action="{{ url('api/campaigns') }}" method="post"
+                                        enctype="multipart/form-data" class="container">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group d-flex align-items-center">
@@ -534,7 +558,8 @@
                                 <!-- Step 5 -->
                                 <h5>Payout Settings</h5>
                                 <section class="">
-                                    <form id="campaignStepFive" action="{{ url('api/campaigns') }}" method="post" enctype="multipart/form-data" class="container">
+                                    <form id="campaignStepFive" action="{{ url('api/campaigns') }}" method="post"
+                                        enctype="multipart/form-data" class="container">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <h5 class="fw-regular mb-2">Campaign Payout Settings</h5>
@@ -821,6 +846,108 @@
             });
         }
 
+        $(".tab-wizard").steps({
+            headerTag: "h5",
+            bodyTag: "section",
+            transitionEffect: "fade",
+            titleTemplate: '<span class="step">#index#</span> #title#',
+            labels: {
+                finish: "Submit"
+            },
+            onStepChanging: function(event, currentIndex, newIndex) {
+                // Getting Current section
+                var section = $(this).find('section.current form');
+                var form_id = section[0].id;
+
+                // Assigning Form to variable
+                var form = document.querySelector('#' + form_id);
+                var formdata = new FormData(form);
+
+                // If Campaign Id is not empty
+                if ($("[name='campaign_id']").val() != "") {
+                    formdata.append('campaign_id', $("[name='campaign_id']").val());
+                }
+
+                // If Current Index is 0 (First Step)
+                if (currentIndex == 0) {
+                    // CKEditor Data for Influencers
+                    var influencer_campaign_brief = window.editors[0].getData();
+                    var influencer_campaign_kpi = window.editors[1].getData();
+                    var influencer_campaign_tc = window.editors[2].getData();
+                    formdata.append('influencer_campaign_brief', influencer_campaign_brief);
+                    formdata.append('influencer_campaign_kpi', influencer_campaign_kpi);
+                    formdata.append('influencer_campaign_tc', influencer_campaign_tc);
+
+                    // CKEditor Data for Brands
+                    var brand_campaign_brief = window.editors[3].getData();
+                    var brand_campaign_kpi = window.editors[4].getData();
+                    var brand_campaign_tc = window.editors[5].getData();
+                    formdata.append('brand_campaign_brief', brand_campaign_brief);
+                    formdata.append('brand_campaign_kpi', brand_campaign_kpi);
+                    formdata.append('brand_campaign_tc', brand_campaign_tc);
+                }
+                formdata.append('campaign_type', $("[name='campaign_type']").val());
+                formdata.append('action', 'store');
+                formdata.append('step', currentIndex);
+
+                // Log FormData Keys and Values
+                /* for (var pair of formdata.entries()) {
+                    console.log(pair[0] + " - " + pair[1]);
+                } */
+
+                var result = true;
+
+                // If Current Index is Less than New Index
+                if (currentIndex < newIndex) {
+                    $.ajax({
+                        async: false,
+                        url: $(form).attr('action'),
+                        method: $(form).attr('method'),
+                        data: formdata,
+                        processData: false,
+                        dataType: "json",
+                        contentType: false,
+                        beforeSend: function() {
+                            $(form).find('span.error-text').text('');
+                        },
+                        success: function(response) {
+                            //console.log(response);
+                            toastr.remove();
+                            if (response.status) {
+                                if (currentIndex == 0) {
+                                    $("[name='campaign_id']").val(response.data);
+                                }
+                                toastr.success(response.message);
+
+                            } else {
+                                toastr.error(response.message);
+                                result = false;
+                            }
+                        },
+                        error: function(response) {
+                            toastr.remove();
+                            $.each(response.responseJSON.errors, function(prefix, val) {
+                                $(form).find('span.' + prefix + '_error').text(val[0]);
+                            });
+                            result = false;
+                        }
+                    });
+                }
+
+                if (result) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            onStepChanged: function(event, currentIndex, priorIndex) {
+                $('.steps .current').prevAll().addClass('disabled');
+            },
+            onFinished: function(event, currentIndex) {
+                //alert();
+            }
+        });
+
         window.editors = {};
 
         document.querySelectorAll('.ckeditor').forEach((node, index) => {
@@ -994,96 +1121,19 @@
                     ]
                 })
                 .then(newEditor => {
-                    window.editors[index] = newEditor
+                    window.editors[index] = newEditor;
+                    //console.log(newEditor.getData());
+                }).catch(error => {
+                    console.error(error);
                 });
         });
+
+        //console.log(window.editors);
 
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
                 "Authorization": "Bearer {{ session()->get('apitoken') }}"
-            }
-        });
-
-        $(".tab-wizard").steps({
-            headerTag: "h5",
-            bodyTag: "section",
-            transitionEffect: "fade",
-            titleTemplate: '<span class="step">#index#</span> #title#',
-            labels: {
-                finish: "Submit"
-            },
-            onStepChanging: function(event, currentIndex, newIndex) {
-                //console.log(event.currentTarget);
-                var section = $(this).find('section.current form');
-                //console.log(section[0].id);
-                var form_id = section[0].id;
-                var form = document.querySelector('#' + form_id);
-                var formdata = new FormData(form);
-
-                // If Campaign Id is not empty
-                if ($("[name='campaign_id']").val() != "") {
-                    formdata.append('campaign_id', $("[name='campaign_id']").val());
-                }
-
-                // If Current Index is 0 (First Step)
-                if (currentIndex == 0) {
-                    // CKEditor Data for Influencers
-                    var influencer_campaign_brief = CKEDITOR.instances.influencer_campaign_brief.getData();
-                    var influencer_campaign_kpi = CKEDITOR.instances.influencer_campaign_kpi.getData();
-                    var influencer_campaign_tc = CKEDITOR.instances.influencer_campaign_tc.getData();
-                    formdata.append('influencer_campaign_brief', influencer_campaign_brief);
-                    formdata.append('influencer_campaign_kpi', influencer_campaign_kpi);
-                    formdata.append('influencer_campaign_tc', influencer_campaign_tc);
-
-                    // CKEditor Data for Brands
-                    var brand_campaign_brief = CKEDITOR.instances.brand_campaign_brief.getData();
-                    var brand_campaign_kpi = CKEDITOR.instances.brand_campaign_kpi.getData();
-                    var brand_campaign_tc = CKEDITOR.instances.brand_campaign_tc.getData();
-                    formdata.append('brand_campaign_brief', brand_campaign_brief);
-                    formdata.append('brand_campaign_kpi', brand_campaign_kpi);
-                    formdata.append('brand_campaign_tc', brand_campaign_tc);
-                }
-                formdata.append('campaign_type', $("[name='campaign_type']").val());
-                formdata.append('action', 'store');
-                formdata.append('step', currentIndex);
-                $.ajax({
-                    url: $(form).attr('action'),
-                    method: $(form).attr('method'),
-                    data: formdata,
-                    processData: false,
-                    dataType: "json",
-                    contentType: false,
-                    beforeSend: function() {
-                        $(form).find('span.error-text').text('');
-                    },
-                    success: function(response) {
-                        //console.log(response);
-                        toastr.remove();
-                        if (response.status) {
-                            if (currentIndex == 0) {
-                                $("[name='campaign_id']").val(response.data);
-                            }
-                            return true;
-                        } else {
-                            toastr.error(response.message);
-                            return false;
-                        }
-                    },
-                    error: function(response) {
-                        toastr.remove();
-                        $.each(response.responseJSON.errors, function(prefix, val) {
-                            $(form).find('span.' + prefix + '_error').text(val[0]);
-                        });
-                        return false;
-                    }
-                });
-            },
-            onStepChanged: function(event, currentIndex, priorIndex) {
-                $('.steps .current').prevAll().addClass('disabled');
-            },
-            onFinished: function(event, currentIndex) {
-                //alert();
             }
         });
     </script>

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class CampaignController extends Controller
 {
@@ -118,22 +119,39 @@ class CampaignController extends Controller
                 case 'store':
                     switch ($request->step) {
                         case 0:
-                            $request->validate([
-                                'campaign_name' => 'required|min:3',
-                                'campaign_type' => 'required|exists:campaign_types,id',
-                                'brand_id' => 'required|exists:brands,id',
-                                'tag_id' => 'required|exists:tags,id',
-                                'end_date' => 'required|date',
-                                'channels' => 'required',
-                            ]);
-
                             if ($request->filled('campaign_id')) {
                                 $request->validate([
-                                    'campaign_id' => 'exists:campaigns,id',
+                                    'campaign_id' => ['required',Rule::exists('campaigns','id')->where(function($query){
+                                        return $query->whereNull('deleted_at');
+                                    })],
+                                    'campaign_name' => ['required', 'min:3', Rule::unique('campaigns')->ignore($request->campaign_id)->where(function ($query) {
+                                        return $query->whereNull('deleted_at');
+                                    })],
+                                    'brand_id' => ['required',Rule::exists('brands','id')->where(function($query){
+                                        return $query->whereNull('deleted_at');
+                                    })],
+                                    'campaign_type' => 'required|exists:campaign_types,id',
+                                    'tag_id' => 'required|exists:tags,id',
+                                    'end_date' => 'required',
+                                    'channels' => 'required',
                                 ]);
+                            } else {
+                                $request->validate([
+                                    'campaign_name' => ['required', 'min:3', Rule::unique('campaigns')->where(function ($query) {
+                                        return $query->whereNull('deleted_at');
+                                    })],
+                                    'brand_id' => ['required',Rule::exists('brands','id')->where(function($query){
+                                        return $query->whereNull('deleted_at');
+                                    })],
+                                    'campaign_type' => 'required|exists:campaign_types,id',
+                                    'tag_id' => 'required|exists:tags,id',
+                                    'end_date' => 'required',
+                                    'channels' => 'required',
+                                ]);
+                            }
 
+                            if ($request->filled('campaign_id')) {
                                 $campaign = Campaign::find($request->campaign_id);
-
                                 $result = "Updated";
                             } else {
                                 $campaign = new Campaign();
@@ -248,7 +266,9 @@ class CampaignController extends Controller
                             break;
                         case 1:
                             $request->validate([
-                                'campaign_id' => 'exists:campaigns,id',
+                                'campaign_id' => ['required',Rule::exists('campaigns','id')->where(function($query){
+                                    return $query->whereNull('deleted_at');
+                                })],
                                 'logofile' => "mimes:jpeg,jpg,png|max:1000",
                                 'campaignimages.*' => "mimes:jpeg,jpg,png|max:1000",
                                 'campaigndocuments.*' => "mimes:pdf,docs,docx,doc|max:1000",
@@ -337,7 +357,14 @@ class CampaignController extends Controller
                             if ($request->filled('campaignvideos')) {
                                 $videos = explode(';', $request->campaignvideos);
 
+                                $videos = array_filter($videos);
+
+                                //dd($videos);
+
                                 foreach ($videos as $url) {
+
+                                    $url = filter_var($url, FILTER_SANITIZE_URL);
+
                                     DB::table('campaign_assets')->insert([
                                         'campaign_id' => $campaign->id,
                                         'path' => $url,
@@ -359,8 +386,10 @@ class CampaignController extends Controller
                         case 2:
 
                             $request->validate([
-                                'campaign_id' => 'exists:campaigns,id',
-                                'landing_page_url' => "required",
+                                'campaign_id' => ['required',Rule::exists('campaigns','id')->where(function($query){
+                                    return $query->whereNull('deleted_at');
+                                })],
+                                'landing_page_url' => 'required|url',
                             ]);
 
                             $campaign = Campaign::find($request->campaign_id);
@@ -394,7 +423,9 @@ class CampaignController extends Controller
                         case 3:
 
                             $request->validate([
-                                'campaign_id' => 'exists:campaigns,id',
+                                'campaign_id' => ['required',Rule::exists('campaigns','id')->where(function($query){
+                                    return $query->whereNull('deleted_at');
+                                })],
                             ]);
 
                             $campaign = Campaign::find($request->campaign_id);
@@ -420,12 +451,26 @@ class CampaignController extends Controller
                         case 4:
 
                             $request->validate([
-                                'campaign_id' => 'exists:campaigns,id',
+                                'campaign_id' => ['required',Rule::exists('campaigns','id')->where(function($query){
+                                    return $query->whereNull('deleted_at');
+                                })],
                             ]);
 
                             $campaign = Campaign::find($request->campaign_id);
 
-
+                            $campaign->commission_type_on_first_transaction = $request->commission_type_on_first_transaction;
+                            $campaign->commission_type_on_other_transaction = $request->commission_type_on_other_transaction;
+                            $campaign->commission_on_first_transaction_brand = $request->commission_on_first_transaction_brand;
+                            $campaign->commission_on_first_transaction_influencer = $request->commission_on_first_transaction_influencer;
+                            $campaign->commission_on_other_transaction_brand = $request->commission_on_other_transaction_brand;
+                            $campaign->commission_on_other_transaction_influencer = $request->commission_on_other_transaction_influencer;
+                            $campaign->lead_commission_value_influencer = $request->lead_commission_value_influencer;
+                            $campaign->lead_commission_value_brand = $request->lead_commission_value_brand;
+                            $campaign->lead_acquisition_value_brand = $request->lead_acquisition_value_brand;
+                            $campaign->lead_acquisition_value_influencer = $request->lead_acquisition_value_influencer;
+                            $campaign->effective_from = date("Y-m-d", strtotime($request->effective_from));
+                            $campaign->note = $request->note;
+                            $campaign->kpichangenotification = (($request->kpichangenotification == null) ? "0" : "1");
 
                             $save_campaign = $campaign->save();
 
