@@ -24,7 +24,7 @@
                 <div class="card-box mb-30 p-1">
                     <div class="">
                         <div class="wizard-content">
-                            <div id="performanceCampaignForm" class="tab-wizard wizard-circle wizard">
+                            <div class="tab-wizard wizard-circle wizard">
                                 <input type="hidden" id="campaign_id" name="campaign_id"
                                     value="@if (isset($data)) {{ $data->id }} @else {{ '' }} @endif">
                                 <input type="hidden" id="campaign_type" name="campaign_type" value="1">
@@ -169,7 +169,6 @@
                                                     <span class="error-text small end_date_error"></span>
                                                 </div>
                                             </div>
-
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
