@@ -238,5 +238,36 @@
 
             ]
         });
+
+        function changeStatus(id, status) {
+            var formdata = new FormData();
+            formdata.append('campaign_id', id);
+            formdata.append('status', status);
+            formdata.append('action', 'change_status');
+            $.ajax({
+                url: "{{ url('api/campaigns') }}",
+                method: "POST",
+                data: formdata,
+                processData: false,
+                dataType: "json",
+                contentType: false,
+                beforeSend: function() {},
+                success: function(response) {
+                    //console.log(response);
+                    if (response.status) {
+                        toastr.success(response.message);
+                        $('#campaigns_table').DataTable().ajax.reload(null, false);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(response) {
+                    toastr.remove();
+                    $.each(response.responseJSON.errors, function(prefix, val) {
+                        $(form).find('span.' + prefix + '_error').text(val[0]);
+                    });
+                }
+            });
+        }
     </script>
 @endpush

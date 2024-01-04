@@ -8,6 +8,10 @@
             height: 200px;
             overflow-y: auto;
         }
+
+        .offercard-row {
+            display: none;
+        }
     </style>
 @endpush
 @section('content')
@@ -167,6 +171,16 @@
                                                     <input class="form-control date-picker" name="end_date"
                                                         placeholder="Select Date" type="text" />
                                                     <span class="error-text small end_date_error"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row border py-2 my-2 offercard-row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="offercard">Campaign Offer Card*</label>
+                                                    <input type="file" name="offercard" id="offercard"
+                                                        class="form-control">
+                                                        <span class="error-text small offercard_error"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -869,6 +883,18 @@
 
                 // If Current Index is 0 (First Step)
                 if (currentIndex == 0) {
+
+                    if ($("[name='offer_type']").val() == 1) {
+                        if ($("[name='offercard']").val() == "") {
+                            $(".offercard_error").text('Please Upload Offer Card for (Type: Special)');
+                            $("[name='offercard']").focus();
+                            //console.log($("[name='offercard']").val());
+                            return false;
+                        }else{
+                            $(".offercard_error").text('');
+                        }
+                    }
+
                     // CKEditor Data for Influencers
                     var influencer_campaign_brief = window.editors[0].getData();
                     var influencer_campaign_kpi = window.editors[1].getData();
@@ -876,6 +902,8 @@
                     formdata.append('influencer_campaign_brief', influencer_campaign_brief);
                     formdata.append('influencer_campaign_kpi', influencer_campaign_kpi);
                     formdata.append('influencer_campaign_tc', influencer_campaign_tc);
+
+
 
                     // CKEditor Data for Brands
                     var brand_campaign_brief = window.editors[3].getData();
@@ -1020,7 +1048,7 @@
                         ]
                     },
                     // https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
-                    placeholder: 'Welcome to CKEditor&nbsp;5!',
+                    placeholder: '',
                     // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
                     fontFamily: {
                         options: [
@@ -1128,6 +1156,14 @@
         });
 
         //console.log(window.editors);
+
+        $("[name='offer_type']").on("change", function() {
+            if ($(this).val() == 1) {
+                $(".offercard-row").slideDown(500);
+            } else {
+                $(".offercard-row").hide(500);
+            }
+        });
 
         $.ajaxSetup({
             headers: {
