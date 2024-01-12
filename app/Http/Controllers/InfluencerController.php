@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\AuthController;
+use App\Models\Influencer;
 
 class InfluencerController extends Controller
 {
@@ -88,7 +89,28 @@ class InfluencerController extends Controller
         if ($request->action) {
             switch ($request->action) {
                 case 'get':
+                    if ($request->filled('influencer_id')) {
+                        $request->validate([
+                            'influencer_id' => 'exists:influencers,id'
+                        ]);
 
+                    } else {
+                        $influencers = Influencer::all();
+
+                        if (!empty($influencers)) {
+                            $response = [
+                                'status' => true,
+                                'message' => 'Influencers Found',
+                                'data' => $influencers->toArray(),
+                            ];
+                        } else {
+                            $response = [
+                                'status' => false,
+                                'message' => 'Influencers Found',
+                                'data' => $influencers->toArray(),
+                            ];
+                        }
+                    }
                     break;
                 case 'store':
                     # code...

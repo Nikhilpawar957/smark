@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\Brand;
 use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -126,7 +125,7 @@ class MasterController extends Controller
                             }
                         }
 
-                        $tag->updated_by = Auth::guard('admin')->user()->id;
+                        $tag->updated_by = Auth::user()->id ?? session()->get('id');
 
                         $save_tag = $tag->save();
 
@@ -160,13 +159,13 @@ class MasterController extends Controller
                                 $tag->image = $destinationPath . $new_filename;
                             }
                         }
-                        $tag->updated_by = Auth::guard('admin')->user()->id;
+                        $tag->updated_by = Auth::user()->id ?? session()->get('id');
                         $save_tag = $tag->save();
 
                         if ($save_tag) {
                             $response = [
                                 'status' => true,
-                                'message' => 'Tag Updated'
+                                'message' => 'Tag Saved'
                             ];
                         } else {
                             $response = [
