@@ -476,6 +476,59 @@ class AdminController extends Controller
 
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('social_links', function ($row) {
+                    $social_links = '';
+                    if (!empty($row->instagram_url)) {
+                        $social_links .= '<a href="' . $row->instagram_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/instagram.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                    }
+                    if (!empty($row->youtube_url)) {
+                        $social_links .= '<a href="' . $row->youtube_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/youtube.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                    }
+                    if (!empty($row->facebook_url)) {
+                        $social_links .= '<a href="' . $row->facebook_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/facebook.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                    }
+                    if (!empty($row->twitter_url)) {
+                        $social_links .= '<a href="' . $row->twitter_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/twitter.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                    }
+                    if (!empty($row->quora_url)) {
+                        $social_links .= '<a href="' . $row->quora_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/quora.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                    }
+                    if (!empty($row->telegram_url)) {
+                        $social_links .= '<a href="' . $row->telegram_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/telegram.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                    }
+                    if (!empty($row->other_url)) {
+                        $social_links .= '<a href="' . $row->other_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/other.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                    }
+                    return $social_links;
+                })
+                ->addColumn('primary_channel', function ($row) {
+                    $primary_channel = '';
+                    if (!empty($row->primary_channel)) {
+
+                        if ($row->primary_channel = 'instagram' && !empty($row->instagram_url)) {
+                            $primary_channel = '<a href="' . $row->instagram_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/instagram.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                        }
+                        if ($row->primary_channel = 'youtube' && !empty($row->youtube_url)) {
+                            $primary_channel = '<a href="' . $row->youtube_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/youtube.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                        }
+                        if ($row->primary_channel = 'facebook' && !empty($row->facebook_url)) {
+                            $primary_channel = '<a href="' . $row->facebook_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/facebook.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                        }
+                        if ($row->primary_channel = 'twitter' && !empty($row->twitter_url)) {
+                            $primary_channel = '<a href="' . $row->twitter_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/twitter.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                        }
+                        if ($row->primary_channel = 'quora' && !empty($row->quora_url)) {
+                            $primary_channel = '<a href="' . $row->quora_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/quora.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                        }
+                        if ($row->primary_channel = 'telegram' && !empty($row->telegram_url)) {
+                            $primary_channel = '<a href="' . $row->telegram_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/telegram.svg") . '" class="mr-2" width="25" height="25" alt=""></a>';
+                        }
+                        if ($row->primary_channel = 'other' && !empty($row->other_url)) {
+                            $primary_channel = '<a href="' . $row->other_url . '" target="_blank"><img src="' . asset("adminassets/src/img/platform/other.svg") . ' class="mr-2" width="25" height="25" alt=""></a>';
+                        }
+                    }
+                    return $primary_channel;
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '
                     <div class="dropdown">
@@ -501,7 +554,7 @@ class AdminController extends Controller
                     </div>';
 
                     return $actionBtn;
-                })
+                })->rawColumns(['action', 'social_links', 'primary_channel'])
                 ->make(true);
         }
     }

@@ -140,12 +140,14 @@
                                     <th>Sr. No</th>
                                     <th>Influencer Name</th>
                                     <th>Influencer ID</th>
-                                    <th>Reg Date</th>
                                     <th>Email</th>
                                     <th>Contact Number</th>
                                     <th>Location</th>
-                                    <th>Tag</th>
-                                    <th>Referral Code</th>
+                                    <th>Lead Owner</th>
+                                    <th>Referral ID</th>
+                                    <th>Reg Date</th>
+                                    <th>Social Platform</th>
+                                    <th>Primary Channel</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -176,11 +178,11 @@
         var table = $('#influencers_table').DataTable({
             processing: true,
             serverSide: true,
-            responsive: true,
             aLengthMenu: [
                 [10, 15, 25, 50, 100, -1],
                 [10, 15, 25, 50, 100, "All"]
             ],
+            scrollX: true,
             "language": {
                 "info": "_START_-_END_ of _TOTAL_ entries",
                 paginate: {
@@ -221,12 +223,6 @@
                     searchable: true
                 },
                 {
-                    data: 'created_at',
-                    name: 'created_at',
-                    orderable: true,
-                    searchable: true
-                },
-                {
                     data: 'email',
                     name: 'email',
                     orderable: true,
@@ -257,6 +253,24 @@
                     searchable: true
                 },
                 {
+                    data: 'created_at',
+                    name: 'created_at',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'social_links',
+                    name: 'social_links',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'primary_channel',
+                    name: 'primary_channel',
+                    orderable: true,
+                    searchable: true
+                },
+                {
                     data: 'status',
                     name: 'status',
                     render: function(data, type, full, meta) {
@@ -273,6 +287,7 @@
                     orderable: true,
                     searchable: true
                 },
+
                 {
                     data: 'action',
                     name: 'action',
